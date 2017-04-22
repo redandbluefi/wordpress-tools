@@ -17,7 +17,8 @@ $modules = apply_filters('rnb_tools_active_modules', [
   'media' => $module_dir . 'media.php',
   'post' => $module_dir . 'post.php',
   'posts' => $module_dir . 'posts.php',
-  'taxonomy' => $module_dir . 'taxonomy.php'
+  'taxonomy' => $module_dir . 'taxonomy.php',
+  'breadcrumb' =>$module_dir . 'breadcrumb.php'
 ]);
 
 foreach ($modules as $name => $path) {
