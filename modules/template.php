@@ -36,7 +36,7 @@ function get(string $template = '', array $variables = []) {
  *
  * @param string $path
  */
-function list ($path = '.') {
+function list_all ($path = '.') {
   $path = rtrim($path, '/');
   return glob(__DIR__ . "/$path/*");
 }
