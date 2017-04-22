@@ -30,3 +30,13 @@ function get(string $template = '', array $variables = []) {
 
   return false;
 }
+
+/**
+ * Return list of files in path relative to current file.
+ *
+ * @param string $path
+ */
+function list ($path = '.') {
+  $path = rtrim($path, '/');
+  return glob(__DIR__ . "/$path/*");
+}
