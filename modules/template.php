@@ -12,7 +12,11 @@ namespace rnb\template;
  *
  * @return boolean
  */
-function get(string $template, array $variables = []) {
+function get(string $template = '', array $variables = []) {
+  if (!$template) {
+    throw new Exception('Template cannot be empty!');
+  }
+
   foreach ($variables as $key => $value) {
     ${$key} = $value;
   }
