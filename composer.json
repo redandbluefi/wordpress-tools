@@ -1,0 +1,13 @@
+{
+    "name": "redandblue/wordpress-tools",
+    "type": "wordpress-muplugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Nikkanen",
+            "email": "hi@kisu.li"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
