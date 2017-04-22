@@ -8,6 +8,8 @@ Author URI: https://redandblue.fi
 License: MIT
 */
 
+namespace rnb;
+
 $module_dir = dirname(__FILE__) . '/modules/';
 $modules = apply_filters('rnb_tools_active_modules', [
   'core' => $module_dir . 'core.php'
