@@ -1,2 +1,2 @@
 <?php
-echo "Hello world from core!";
+namespace rnb\core;
