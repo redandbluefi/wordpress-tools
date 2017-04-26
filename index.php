@@ -13,6 +13,7 @@ namespace rnb;
 $module_dir = dirname(__FILE__) . '/modules/';
 $modules = apply_filters('rnb_tools_active_modules', [
   'core' => $module_dir . 'core.php',
+  'debug' => $module_dir . 'debug.php',
   'template' => $module_dir . 'template.php',
   'media' => $module_dir . 'media.php',
   'post' => $module_dir . 'post.php',
