@@ -40,3 +40,28 @@ function list_all ($path = '.') {
   $path = rtrim($path, '/');
   return glob(__DIR__ . "/$path/*");
 }
+
+/**
+ * Returns a <time> element containing the time. Pass falsy value to format to
+ * exclude them from output.
+ *
+ * @param string $date_format
+ * @param string $time_format
+ * @param mixed $time Optionally pass custom time
+ */
+function date($date_format = 'd.m.Y', $time_format = 'H:i', $time = NULL) {
+  if (is_null($time)) {
+    $date = get_the_date("$date_format | $time_format");
+  } else {
+    $date = \date("$date_format | $time_format", strtotime($time));
+  }
+
+  $datearray = explode(' | ', $date);
+
+  return \rnb\core\tag([
+    "<time class='wpt-time'>",
+      $date_format ? "<span class='wpt-time__date'>$datearray[0]</span>" : '',
+      $time_format ? "<span class='wpt-time__time'>$datearray[1]</span>" : '',
+    "</time>"
+  ]);
+}
