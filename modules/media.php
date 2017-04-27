@@ -20,15 +20,13 @@ function image($image, $size = 'medium', $responsive = true) {
   $has_title = strpos($data[src], $data['title']) > -1 ? false : true;
   $class = $responsive ? 'wpt-image wpt-image--responsive' : 'wpt-image';
 
-  $img = [
+  return \rnb\core\tag([
     "<img src='$data[src]'",
     $responsive ? "srcset='$data[srcset]'" : "",
     $has_title ? "title='$data[title]'" : "",
     "class='$class'",
     "alt='$data[alt]'>"
-  ];
-
-  return join(' ', $img);
+  ]);
 }
 
 function get_image_data($image, $responsive = true) {

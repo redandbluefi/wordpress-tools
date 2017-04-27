@@ -20,6 +20,11 @@ function register_strings() {
   }
 }
 
+function tag($parts = [], $glue = ' ') {
+  return \join($glue, $parts);
+}
+
 function init() {
   register_strings();
 }
+
