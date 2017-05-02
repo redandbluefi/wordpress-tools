@@ -19,6 +19,7 @@ $modules = apply_filters('rnb_tools_active_modules', [
   'post' => $module_dir . 'post.php',
   'posts' => $module_dir . 'posts.php',
   'taxonomy' => $module_dir . 'taxonomy.php',
+  'i18n' => $module_dir . 'i18n.php',
   'breadcrumb' =>$module_dir . 'breadcrumb.php'
 ]);
 
