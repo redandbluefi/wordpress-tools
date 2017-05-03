@@ -31,6 +31,23 @@ function get(string $template = '', array $variables = []) {
   return false;
 }
 
+
+/**
+ * Retrieves highest priority template using \rnb\template\get and returns it
+ * so you can save it in a variab.
+ * @param string $template Relative path from theme root, usually
+ * templates/file.php
+ * @param array $variables Anything you pass with this array will be used as
+ * function parameters for the template.
+ *
+ */
+function save(string $template = '', array $variables = []) {
+  ob_start();
+  get($template, $varibles);
+
+  return ob_get_clean();
+}
+
 /**
  * Return list of files in path relative to current file.
  *
