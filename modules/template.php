@@ -43,7 +43,7 @@ function get(string $template = '', array $variables = []) {
  */
 function save(string $template = '', array $variables = []) {
   ob_start();
-  get($template, $varibles);
+  get($template, $variables);
 
   return ob_get_clean();
 }
@@ -80,5 +80,33 @@ function date($date_format = 'd.m.Y', $time_format = 'H:i', $time = NULL) {
       $date_format ? "<span class='wpt-time__date'>$datearray[0]</span>" : '',
       $time_format ? "<span class='wpt-time__time'>$datearray[1]</span>" : '',
     "</time>"
+  ]);
+}
+
+/**
+ * Returns a <a> element containing the "primary" (first) term. Optionally pass
+ * and ID or term object to retrieve that term as an element.
+ *
+ * @param string $taxonomy
+ * @param mixed $term
+ */
+function term($taxonomy = 'category', $term = NULL) {
+  if (is_null($term)) {
+    $data = \rnb\taxonomy\get_primary_term($taxonomy);
+  } else {
+    $data = \get_term($term, $taxonomy);
+  }
+
+  if (!$data) {
+    trigger_error("No term found in $taxonomy.", E_USER_WARNING);
+    return false;
+  }
+
+  $link = get_term_link($data, $taxonomy);
+
+  return \rnb\core\tag([
+    "<a class='wpt-term' href='$link' data-slug='$data->slug' data-id='$data->ID'>",
+      "<span class='wpt-term__name'>$data->name</span>",
+    "</a>"
   ]);
 }
