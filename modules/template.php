@@ -110,3 +110,25 @@ function term($taxonomy = 'category', $term = NULL) {
     "</a>"
   ]);
 }
+
+
+/**
+ * Returns a <a> element containing the permalink.
+ *
+ * @param mixed $post_id
+ * @param string $text
+ */
+function readmore($post_id = NULL, $text = 'Read more') {
+  if (is_null($post_id)) {
+    $post_id = get_the_ID();
+  }
+
+  $text = apply_filters('rnb_tools_template_readmore', $text);
+  $link = get_permalink($post_id);
+
+  return \rnb\core\tag([
+    "<a class='wpt-permalink' href='$link' data-id='$post_id'>",
+      "<span class='wpt-term__name'>$text</span>",
+    "</a>"
+  ]);
+}
