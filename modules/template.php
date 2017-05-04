@@ -127,8 +127,8 @@ function readmore($post_id = NULL, $text = 'Read more') {
   $link = get_permalink($post_id);
 
   return \rnb\core\tag([
-    "<a class='wpt-permalink' href='$link' data-id='$post_id'>",
-      "<span class='wpt-term__name'>$text</span>",
+    "<a class='wpt-readmore' href='$link' data-id='$post_id'>",
+      "<span class='wpt-readmore__text'>$text</span>",
     "</a>"
   ]);
 }
