@@ -50,3 +50,42 @@ function get_image_data($image, $responsive = true) {
     'title' => $attachment->post_title
   ];
 }
+
+
+/**
+ * Returns URl for local resource, relative to theme root.
+ * Usage: <?=\rnb\media\themeresource($image, 'your-size')?>
+ *
+ * @param string $resource
+ */
+function themeresource(string $resource = '') {
+  $path = '';
+  $localpath = '';
+
+  if (function_exists('getenv')) {
+    $errorlevel = getenv('WP_ENV') === 'development'
+      ? E_USER_ERROR
+      : E_USER_WARNING;
+  } else {
+    $errorlevel = E_USER_WARNING;
+  }
+
+  if (is_child_theme()) {
+    // If it's a child theme, we're most likely going to want to get the
+    // resources from the child theme dir.
+    $path = get_stylesheet_directory_uri();
+    $localpath = get_stylesheet_directory();
+  } else {
+    $path = get_template_directory_uri();
+    $localpath = get_template_directory();
+  }
+
+  $path = $path . DIRECTORY_SEPARATOR;
+  $localpath = $localpath . DIRECTORY_SEPARATOR;
+
+  if (!file_exists($localpath . $resource)) {
+    trigger_error("No file was found at {$localpath}{$resource}.", $errorlevel);
+  }
+
+  return $path . $resource;
+}
