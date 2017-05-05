@@ -1,11 +1,6 @@
 <?php
 namespace rnb\breadcrumb;
 
-/**
- * TODO: rename filters
- *
- */
-
 class Breadcrumb {
   public function __construct($separator, $home_text) {
     $this->separator = $separator;
@@ -17,7 +12,7 @@ class Breadcrumb {
      */
     global $pagenow;
     $this->queried = get_queried_object();
-    $this->queried =!empty($this->queried)
+    $this->queried = !empty($this->queried)
       ? $this->queried
       : (object) array("name" => 'search');
 
@@ -26,6 +21,7 @@ class Breadcrumb {
   }
 
   public function create() {
+    $queried = $this->queried;
     $open = "<div class='rnb-breadcrumb'>";
     $close = "</div>";
 
@@ -62,23 +58,27 @@ class Breadcrumb {
       }
     }
 
-    $recent = apply_filters('rnb_breadcrumb_recent_text', $recent);
-
-    if (is_archive()) {
+    $recent = apply_filters('rnb_tools_breadcrumb_recent_text', $recent);
+    if (is_category()){
+      var_dump($queried);
+      $link = get_category_link($queried->term_id);
+      $items .= apply_filters('rnb_tools_breadcrumb_category', "$this->separator <a href='$link'>{$queried->name}</a> ");
+    } else if (is_archive()) {
+      var_dump('hello 2');
       $link = get_post_type_archive_link($queried->name);
-      $items .= apply_filters('rnb_breadcrumb_archive', "$this->separator <a href='$link'>{$queried->label}</a> ");
+      $items .= apply_filters('rnb_tools_breadcrumb_archive', "$this->separator <a href='$link'>{$queried->label}</a> ");
     } elseif (get_the_ID() == get_option('page_for_posts')){
       $link = get_post_type_archive_link($queried->name);
-      $items .= apply_filters('rnb_breadcrumb_home', "$this->separator <a href='$link'>$recent</a> ");
+      $items .= apply_filters('rnb_tools_breadcrumb_home', "$this->separator <a href='$link'>$recent</a> ");
     } elseif (is_home()) {
       // These two last are basically the same thing. But this is for corner cases.
       $link = get_post_type_archive_link($queried->name);
-      $items .= apply_filters('rnb_breadcrumb_home', "$this->separator <a href='$link'>$recent</a> ");
+      $items .= apply_filters('rnb_tools_breadcrumb_home', "$this->separator <a href='$link'>$recent</a> ");
     }
 
     if (is_search()) {
       $link = '?s=';
-      $items .= apply_filters('rnb_breadcrumb_search', "$this->separator <a href='$link'>$search</a> ");
+      $items .= apply_filters('rnb_tools_breadcrumb_search', "$this->separator <a href='$link'>$search</a> ");
     }
 
     if (is_singular()) {
@@ -89,19 +89,19 @@ class Breadcrumb {
       if ($has_archive){
         $link = get_post_type_archive_link($queried->post_type);
         $items .= apply_filters(
-          'rnb_breadcrumb_single_cpt_archive',
+          'rnb_tools_breadcrumb_single_cpt_archive',
           "$this->separator <a href='$link'>{$post_type_obj->label}</a> "
         );
 
       } elseif($queried->post_type === "post") {
         $link = get_post_type_archive_link($queried->post_type);
         $items .= apply_filters(
-          'rnb_breadcrumb_single_post_archive',
+          'rnb_tools_breadcrumb_single_post_archive',
           "$this->separator <a href='$link'>{$post_type_obj->label}</a> "
         );
       }
 
-      if (!empty($ancestors) && apply_filters('rnb_breadcrumb_enable_ancestors', true)) {
+      if (!empty($ancestors) && apply_filters('rnb_tools_breadcrumb_enable_ancestors', true)) {
         $ancestors = array_reverse($ancestors);
         foreach($ancestors as $ancestor) {
           $link = get_permalink($ancestor);
@@ -114,15 +114,17 @@ class Breadcrumb {
       $link = get_permalink(get_the_ID());
       $title = get_the_title(get_the_ID());
 
-      $items .= apply_filters('rnb_breadcrumb_current', "$this->separator <a href='$link'>$title</a> ");
+      $items .= apply_filters('rnb_tools_breadcrumb_current', "$this->separator <a href='$link'>$title</a> ");
 
     }
 
-    $open = apply_filters('rnb_breadcrumb_open', $open);
-    $close = apply_filters('rnb_breadcrumb_close', $close);
+    $open = apply_filters('rnb_tools_breadcrumb_open', $open);
+    $close = apply_filters('rnb_tools_breadcrumb_close', $close);
 
-    $breadcrumb = apply_filters('rnb_breadcrumb', "$open $home $items $close");
-    set_transient($this->transient_key, $breadcrumb, apply_filters('rnb_breadcrumb_transient', 60 * 5));
+    $breadcrumb = apply_filters('rnb_tools_breadcrumb', "$open $home $items $close");
+    set_transient($this->transient_key, $breadcrumb, apply_filters('rnb_tools_breadcrumb_transient', 60 * 5));
+
+    return $breadcrumb;
   }
 
   public function get_cached() {
@@ -130,7 +132,11 @@ class Breadcrumb {
   }
 
   public function print() {
-    $cached = $this->get_cached();
+    if (\rnb\core\is_prod()) {
+      $cached = $this->get_cached();
+    } else {
+      $cached = false;
+    }
 
     if (!$cached) {
       $breadcrumb = $this->create();
