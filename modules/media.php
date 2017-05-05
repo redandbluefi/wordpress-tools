@@ -10,7 +10,7 @@ namespace rnb\media;
  * @param boolean $responsive
  */
 function image($image, $size = 'medium', $responsive = true) {
-  $data = get_image_data($image, $responsive);
+  $data = get_image_data($image, $size);
 
   if (!$data) {
     return false;
@@ -29,7 +29,7 @@ function image($image, $size = 'medium', $responsive = true) {
   ]);
 }
 
-function get_image_data($image, $responsive = true) {
+function get_image_data($image, $size = 'medium') {
   if (is_array($image)) {
     $id = $image['ID'];
   } else if (is_numeric($image)) {
