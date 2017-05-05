@@ -29,6 +29,25 @@ function image($image, $size = 'medium', $responsive = true) {
   ]);
 }
 
+function captioned_image($image, $size, $responsive = true) {
+  $image = image($image, $size, $responsive);
+
+  if (!$image) {
+    return false;
+  }
+
+  $caption = get_image_data($image, $size)['caption'];
+
+  return \rnb\core\tag([
+    "<figure class='wpt-captioned'>",
+      $image,
+      "<figcaption class='wpt-captioned__caption'>",
+        $caption,
+      "</figcaption>",
+    "</figure>"
+  ]);
+}
+
 function get_image_data($image, $size = 'medium') {
   if (is_array($image)) {
     $id = $image['ID'];
