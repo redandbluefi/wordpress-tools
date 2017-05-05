@@ -58,16 +58,35 @@ function get_image_data($image, $size = 'medium') {
     return false;
   }
 
-  $attachment = get_post($id);
+  // Cache the call so we won't have to fetch the data again and again...
 
-  return [
-    'src' => wp_get_attachment_image_url($id, $size),
-    'srcset' => wp_get_attachment_image_srcset($id, $size),
-    'alt' => get_post_meta($id, '_wp_attachment_image_alt', true),
-    'caption' => $attachment->post_excerpt,
-    'description' => $attachment->post_content,
-    'title' => $attachment->post_title
-  ];
+  $key = "wpt_gid_$id";
+  $transient = get_transient($key);
+
+  if ($transient) {
+    return $transient;
+  } else {
+    $attachment = get_post($id);
+    $data = [
+      'src' => wp_get_attachment_image_url($id, $size),
+      'srcset' => wp_get_attachment_image_srcset($id, $size),
+      'alt' => get_post_meta($id, '_wp_attachment_image_alt', true),
+      'caption' => $attachment->post_excerpt,
+      'description' => $attachment->post_content,
+      'title' => $attachment->post_title
+    ];
+
+    set_transient(
+      $key,
+      $data,
+      apply_filters(
+        'rnb_tools_media_get_image_data_transient',
+        MINUTE_IN_SECONDS
+      )
+    );
+
+    return $data;
+  }
 }
 
 
