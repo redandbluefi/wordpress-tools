@@ -60,11 +60,9 @@ class Breadcrumb {
 
     $recent = apply_filters('rnb_tools_breadcrumb_recent_text', $recent);
     if (is_category()){
-      var_dump($queried);
       $link = get_category_link($queried->term_id);
       $items .= apply_filters('rnb_tools_breadcrumb_category', "$this->separator <a href='$link'>{$queried->name}</a> ");
     } else if (is_archive()) {
-      var_dump('hello 2');
       $link = get_post_type_archive_link($queried->name);
       $items .= apply_filters('rnb_tools_breadcrumb_archive', "$this->separator <a href='$link'>{$queried->label}</a> ");
     } elseif (get_the_ID() == get_option('page_for_posts')){
