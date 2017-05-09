@@ -61,7 +61,11 @@ function get_image_data($image, $size = 'medium') {
   // Cache the call so we won't have to fetch the data again and again...
 
   $key = "wpt_gid_$id";
-  $transient = get_transient($key);
+  if (!\rnb\core\is_dev()) {
+    $transient = get_transient($key);
+  } else {
+    $transient = false;
+  }
 
   if ($transient) {
     return $transient;
