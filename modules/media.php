@@ -17,7 +17,7 @@ function image($image, $size = 'medium', $responsive = true) {
   }
 
   // If the title contains the filename, don't use a title.
-  $has_title = strpos($data[src], $data['title']) > -1 ? false : true;
+  $has_title = strpos($data['src'], $data['title']) > -1 ? false : true;
   $class = $responsive ? 'wpt-image wpt-image--responsive' : 'wpt-image';
 
   return \rnb\core\tag([
