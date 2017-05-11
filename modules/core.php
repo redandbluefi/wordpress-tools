@@ -38,8 +38,24 @@ function is_dev() {
   return env() === 'development';
 }
 
-function tag($parts = [], $glue = ' ') {
-  return \join($glue, $parts);
+function tag($parts = [], $glue = "\n") {
+  foreach ($parts as $key => $part) {
+    // array map sucks in PHP
+    if (!is_array($part)) {
+      $parts[$key] = [$part];
+    }
+  }
+
+  $html = "";
+  $it = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($parts));
+  foreach ($it as $key => $part) {
+    $html .= $part . $glue;
+  }
+  // \rnb\debug\dump($html);
+
+  return $html;
+  // \rnb\debug\dump($parts);
+  // return \join($glue, $parts);
 }
 
 function init() {
