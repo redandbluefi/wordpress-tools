@@ -90,7 +90,10 @@ function date($date_format = 'd.m.Y', $time_format = 'H:i', $time = NULL) {
  * @param string $taxonomy
  * @param mixed $term
  */
-function term($taxonomy = 'category', $term = NULL) {
+function term($taxonomy = 'category', $term = NULL, $options = []) {
+  $options['link_append'] = $options['link_append'] ?? ''; // append anchors or similar
+  $options['link_class'] = $options['link_class'] ?? '';
+
   if (is_null($term)) {
     $data = \rnb\taxonomy\get_primary_term($taxonomy);
   } else {
@@ -105,7 +108,11 @@ function term($taxonomy = 'category', $term = NULL) {
   $link = get_term_link($data, $taxonomy);
 
   return \rnb\core\tag([
-    "<a class='wpt-term' href='$link' data-slug='$data->slug' data-id='$data->ID'>",
+    "<a ",
+      "class='wpt-term $options[link_class]'",
+      "href='{$link}{$options['link_append']}'",
+      "data-slug='$data->slug' data-id='$data->ID'",
+    ">",
       "<span class='wpt-term__name'>$data->name</span>",
     "</a>"
   ]);
