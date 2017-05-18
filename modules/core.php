@@ -58,6 +58,47 @@ function tag($parts = [], $glue = "\n") {
   // return \join($glue, $parts);
 }
 
+/**
+ * Replacement for wp_enqueue_script & wp_enqueue_style. Handles cachebusting hashes.
+ * define('WPT_ENQUEUE_STRIP_PATH', '/data/wordpress/htdocs');
+ * \rnb\core\enqueue(get_stylesheet_directory() . '/build/client.*.js');
+ *
+ * @param string $path
+ * @param array $deps
+ */
+function enqueue($path = NULL, $deps = []) {
+  if (is_null($path)) {
+    trigger_error('Enqueue path must not be empty', E_USER_ERROR);
+  } else if (!defined('WPT_ENQUEUE_STRIP_PATH')) {
+    trigger_error('You must define WPT_ENQUEUE_STRIP_PATH, 99% of the time it\'s /data/wordpress/htdocs', E_USER_ERROR);
+  }
+
+  $files = glob($path, GLOB_MARK);
+  usort($files, function($a, $b) {
+    return filemtime($b) - filemtime($a);
+  });
+
+  $file = $files[0];
+  $parts = explode(".", $file);
+  $type = array_reverse($parts)[0];
+  $handle = basename($parts[0]) . "-" . $type;
+
+  $file = str_replace(WPT_ENQUEUE_STRIP_PATH, "", $file);
+
+  switch($type) {
+    case "js":
+      \wp_enqueue_script($handle, $file, $deps, false, true);
+    break;
+
+    case "css":
+      \wp_enqueue_style($handle, $file, $deps, false, 'all');
+      break;
+
+    default:
+      trigger_error('Enqueued file must be a css or js file.', E_USER_ERROR);
+  }
+}
+
 function init() {
   register_strings();
 }
