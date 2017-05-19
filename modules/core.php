@@ -95,6 +95,11 @@ function enqueue($path = NULL, $deps = []) {
   }
 
   $files = glob($path, GLOB_MARK);
+  $unhashed = str_replace("*.", "", $path);
+  if (file_exists($unhashed)) {
+    $files[] = $unhashed;
+  }
+
   usort($files, function($a, $b) {
     return filemtime($b) - filemtime($a);
   });
