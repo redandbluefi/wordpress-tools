@@ -69,6 +69,17 @@ function current_url() {
 }
 
 /**
+ * Return string in slugish format. Useful for creating HTML ids and such.
+ *
+ * @param string $string
+ */
+function slugify($string = '') {
+  $string = str_replace(' ', '-', $string);
+  $string = strtolower($string);
+  return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
+}
+
+/**
  * Replacement for wp_enqueue_script & wp_enqueue_style. Handles cachebusting hashes.
  * define('WPT_ENQUEUE_STRIP_PATH', '/data/wordpress/htdocs');
  * \rnb\core\enqueue(get_stylesheet_directory() . '/build/client.*.js');
