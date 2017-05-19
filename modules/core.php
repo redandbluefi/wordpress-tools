@@ -59,6 +59,16 @@ function tag($parts = [], $glue = "\n") {
 }
 
 /**
+ * Return the current, full URL.
+ * Because PHP is incompetent and unable to do so with a single server var.
+ *
+ */
+function current_url() {
+  $protocol = (isset($_SERVER['HTTPS']) ? "https" : "http");
+  return "$protocol://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+}
+
+/**
  * Replacement for wp_enqueue_script & wp_enqueue_style. Handles cachebusting hashes.
  * define('WPT_ENQUEUE_STRIP_PATH', '/data/wordpress/htdocs');
  * \rnb\core\enqueue(get_stylesheet_directory() . '/build/client.*.js');
