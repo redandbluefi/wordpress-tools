@@ -100,17 +100,9 @@ function get_image_data($image, $size = 'medium') {
  *
  * @param string $resource
  */
-function themeresource(string $resource = '') {
+function themeresource(string $resource = '', $mode = 'uri') {
   $path = '';
   $localpath = '';
-
-  if (function_exists('getenv')) {
-    $errorlevel = getenv('WP_ENV') === 'development'
-      ? E_USER_ERROR
-      : E_USER_WARNING;
-  } else {
-    $errorlevel = E_USER_WARNING;
-  }
 
   if (is_child_theme()) {
     // If it's a child theme, we're most likely going to want to get the
@@ -126,8 +118,31 @@ function themeresource(string $resource = '') {
   $localpath = $localpath . DIRECTORY_SEPARATOR;
 
   if (!file_exists($localpath . $resource)) {
-    trigger_error("No file was found at {$localpath}{$resource}.", $errorlevel);
+    return false;
+  }
+
+  if ($mode === 'local') {
+    return $localpath . $resource;
   }
 
   return $path . $resource;
+}
+
+function inline_svg($name) {
+  $checklist = [$name, "$name.svg", "icon_$name.svg"]; // check in this order
+  $build_svg = function($path) {
+    $svg = file_get_contents($path);
+    return "<div class='wpt-inline-svg'>$svg</div>";
+  };
+
+  foreach ($checklist as $file) {
+    $filepath = themeresource($file, 'local');
+    if ($filepath) {
+      return $build_svg($filepath);
+    }
+
+    return false;
+  }
+
+  return false;
 }
