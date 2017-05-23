@@ -70,7 +70,7 @@ function sample_template_named_params($data = []) {
   $title = $data['title'] ?? 'Default title';
   $content = $data['content'] ?? 'Default content';
   $template_hook = $data['template_hook'] ?? '<!-- You could inject stuff here -->';
-  $template_fn = $data['template_fn'] ?? function() { return 'Dummy function'; };
+  $template_fn = !is_null($data['template_fn']) ? $data['template_fn'] : function() { return 'Dummy function'; };
   ?>
   <div>
     <h1><?=$title?></h1>
