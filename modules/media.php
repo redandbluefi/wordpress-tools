@@ -1,8 +1,12 @@
 <?php
+/**
+ * Media related tools.
+ */
+
 namespace rnb\media;
 
 /**
- * Returns image element.
+ * Returns an image element.
  * Usage: <?=\rnb\media\image($image, 'your-size')?>
  *
  * @param mixed $image
@@ -29,6 +33,13 @@ function image($image, $size = 'medium', $responsive = true) {
   ]);
 }
 
+/**
+ * Returns an image element with captions.
+ *
+ * @param mixed $image
+ * @param string $size
+ * @param boolean $responsive
+ */
 function captioned_image($image, $size, $responsive = true) {
   $image = image($image, $size, $responsive);
 
@@ -48,6 +59,12 @@ function captioned_image($image, $size, $responsive = true) {
   ]);
 }
 
+/**
+ * Return all relevant data for an image as an array.
+ *
+ * @param mixed $image
+ * @param string $size
+ */
 function get_image_data($image, $size = 'medium') {
   if (is_array($image)) {
     $id = $image['ID'];
@@ -99,6 +116,7 @@ function get_image_data($image, $size = 'medium') {
  * Usage: <?=\rnb\media\themeresource($image, 'your-size')?>
  *
  * @param string $resource
+ * @param string $mode Determines wether to return server side or client side path.
  */
 function themeresource(string $resource = '', $mode = 'uri') {
   $path = '';
@@ -128,6 +146,11 @@ function themeresource(string $resource = '', $mode = 'uri') {
   return $path . $resource;
 }
 
+/**
+ * Return an inline svg element, contained in a wrapper div.
+ *
+ * @param mixed $name
+ */
 function inline_svg($name) {
   $checklist = [$name, "$name.svg", "icon_$name.svg"]; // check in this order
   $build_svg = function($path) {

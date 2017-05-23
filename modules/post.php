@@ -1,6 +1,17 @@
 <?php
+/**
+ * Single post related tools.
+ */
+
 namespace rnb\post;
 
+/**
+ * Return post excerpt. Tries to get a dedicated custom field first, then falls
+ * back to native excerpt and finally gets a preview from content unless told not to.
+ *
+ * @param mixed $post_id
+ * @param boolean $fallback
+ */
 function get_excerpt($post_id = NULL, $fallback = true) {
   if(is_null($post_id)) {
     $post_id = get_the_ID();
@@ -17,6 +28,11 @@ function get_excerpt($post_id = NULL, $fallback = true) {
   return false;
 }
 
+/**
+ * Get preview from the content. Stops at first paragraph.
+ *
+ * @param mixed $post_id
+ */
 function get_preview($post_id = NULL) {
   if(is_null($post_id)) {
     $post_id = get_the_ID();
@@ -29,6 +45,12 @@ function get_preview($post_id = NULL) {
   return $str;
 }
 
+/**
+ * Return the excerpt as a template tag, using get_excerpt().
+ *
+ * @param mixed $post_id
+ * @param boolean $fallback
+ */
 function excerpt($post_id = NULL, $fallback = true) {
   $excerpt = get_excerpt($post_id, $fallback);
 
@@ -41,6 +63,13 @@ function excerpt($post_id = NULL, $fallback = true) {
   ]);
 }
 
+/**
+ * Return a preview of the post as a template tag, using get_preview().
+ *
+ * @param int $word_count
+ * @param string $more
+ * @param mixed $post_id
+ */
 function preview($word_count = 30, $more = "&hellip;", $post_id = NULL) {
   $preview = get_preview($post_id);
 

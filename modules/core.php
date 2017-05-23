@@ -1,11 +1,14 @@
 <?php
+/**
+ * wordpress-tools core
+ */
+
 namespace rnb\core;
 
 /**
- * This must be called in admin, it does nothing when called in client.
+ * Registers Polylang strings. Must be called in admin.
  *
  */
-
 function register_strings() {
 
   $strings = [
@@ -20,6 +23,11 @@ function register_strings() {
   }
 }
 
+/**
+ * Returns current env, defaulting to production if none set.
+ *
+ * @return string
+ */
 function env() {
   if (defined('WP_ENV')) {
     return WP_ENV;
@@ -30,14 +38,32 @@ function env() {
   return WP_ENV;
 }
 
+/**
+ * Return wether env is production or not.
+ *
+ * @return boolean
+ */
 function is_prod() {
   return env() === 'production';
 }
 
+/**
+ * Return wether env is development or not.
+ *
+ * @return boolean
+ */
 function is_dev() {
   return env() === 'development';
 }
 
+/**
+ * Concats strings and arrays into one string. Useful for tags.
+ *
+ * @param mixe} $parts
+ * @param string $glue
+ *
+ * @return string
+ */
 function tag($parts = [], $glue = "\n") {
   foreach ($parts as $key => $part) {
     // array map sucks in PHP
@@ -51,17 +77,15 @@ function tag($parts = [], $glue = "\n") {
   foreach ($it as $key => $part) {
     $html .= $part . $glue;
   }
-  // \rnb\debug\dump($html);
 
   return $html;
-  // \rnb\debug\dump($parts);
-  // return \join($glue, $parts);
 }
 
 /**
  * Return the current, full URL.
  * Because PHP is incompetent and unable to do so with a single server var.
  *
+ * @return string
  */
 function current_url() {
   $protocol = (isset($_SERVER['HTTPS']) ? "https" : "http");
@@ -72,6 +96,8 @@ function current_url() {
  * Return string in slugish format. Useful for creating HTML ids and such.
  *
  * @param string $string
+ *
+ * @return string
  */
 function slugify($string = '') {
   $string = str_replace(' ', '-', $string);
@@ -86,6 +112,8 @@ function slugify($string = '') {
  *
  * @param string $path
  * @param array $deps
+ *
+ * @return void
  */
 function enqueue($path = NULL, $deps = []) {
   if (is_null($path)) {
@@ -125,7 +153,10 @@ function enqueue($path = NULL, $deps = []) {
   }
 }
 
+/**
+ * Run wordpress-tools core operations.
+ *
+ */
 function init() {
   register_strings();
 }
-

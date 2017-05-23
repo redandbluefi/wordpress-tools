@@ -1,4 +1,8 @@
 <?php
+/**
+ * Internationalization tools.
+ */
+
 namespace rnb\i18n;
 
 /**

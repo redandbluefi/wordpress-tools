@@ -1,4 +1,8 @@
 <?php
+/**
+ * Contains the breadcrumb.
+ */
+
 namespace rnb\breadcrumb;
 
 class Breadcrumb {

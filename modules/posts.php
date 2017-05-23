@@ -1,4 +1,8 @@
 <?php
+/**
+ * Tools related to posts in general.
+ */
+
 namespace rnb\posts;
 
 /**

@@ -1,6 +1,16 @@
 <?php
+/**
+ * Taxonomy related tools.
+ */
+
 namespace rnb\taxonomy;
 
+/**
+ * Returns the "primary" term, which means the first that is in the list. Respects term order.
+ *
+ * @param string $taxonomy
+ * @param mixed $post_id
+ */
 function get_primary_term($taxonomy = 'category', $post_id = NULL) {
   if (is_null($post_id)) {
     $post_id = get_the_ID();

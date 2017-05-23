@@ -1,4 +1,8 @@
 <?php
+/**
+ * Template related tools.
+ */
+
 namespace rnb\template;
 
 /**
@@ -8,7 +12,7 @@ namespace rnb\template;
  * @param string $template Template init function name
  * @param array $variables Array without string keys, will be passed as function arguments.
  *
- * @return boolean
+ * @return mixed
  */
 function get(string $template = '', array $variables = []) {
   if (!$template) {
@@ -43,8 +47,8 @@ function get(string $template = '', array $variables = []) {
  * use classes if you wanted. Usage:
  * <?=\rnb\template\get('\rnb\template\sample_template', ['Hello', 'world!']);
  *
- * @param ${2:string} $title${3}
- * @param ${4:string} $content${5}
+ * @param string $title
+ * @param string $content
  */
 function sample_template($title = 'Hello', $content = 'you') { ?>
   <div>
@@ -72,7 +76,7 @@ function sample_template_named_params($data = []) {
 
 /**
  * Return template instead of printing it. Uses get() internally.
- * @param string Function name
+ * @param string $template Function name
  * @param array $variables Anything you pass with this array will be used as
  * function parameters for the template.
  *
@@ -136,6 +140,7 @@ function date($date_format = 'd.m.Y', $time_format = 'H:i', $time = NULL) {
  *
  * @param string $taxonomy
  * @param mixed $term
+ * @param array $options (optional)
  */
 function term($taxonomy = 'category', $term = NULL, $options = []) {
   $options['link_append'] = $options['link_append'] ?? ''; // append anchors or similar

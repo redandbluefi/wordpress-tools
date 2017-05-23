@@ -138,49 +138,50 @@
                 <h3><i class="icon-custom icon-function"></i> Functions</h3>
                                         <div id="get_primary_term" class="element ajax clickable function">
         <h1>get_primary_term<a href="../namespaces/rnb.taxonomy.html#function_get_primary_term">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Returns the &quot;primary&quot; term, which means the first that is in the list. Respects term order.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.taxonomy.html#function_get_primary_term" class="more">« More »</a>
     </div>
 
                                         <div id="dump" class="element ajax clickable function">
         <h1>dump<a href="../namespaces/rnb.debug.html#function_dump">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Takes all parameters and dumps them in a nice readable format. Unlike with xdebug var_dump or print_r,
+flexbox shouldn&#039;t ruin the day.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.debug.html#function_dump" class="more">« More »</a>
     </div>
 
                                         <div id="register_strings" class="element ajax clickable function">
         <h1>register_strings<a href="../namespaces/rnb.core.html#function_register_strings">¶</a></h1>
-        <p class="short_description">This must be called in admin, it does nothing when called in client.</p>
+        <p class="short_description">Registers Polylang strings. Must be called in admin.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.core.html#function_register_strings" class="more">« More »</a>
     </div>
 
                                         <div id="env" class="element ajax clickable function">
         <h1>env<a href="../namespaces/rnb.core.html#function_env">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Returns current env, defaulting to production if none set.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.core.html#function_env" class="more">« More »</a>
     </div>
 
                                         <div id="is_prod" class="element ajax clickable function">
         <h1>is_prod<a href="../namespaces/rnb.core.html#function_is_prod">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Return wether env is production or not.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.core.html#function_is_prod" class="more">« More »</a>
     </div>
 
                                         <div id="is_dev" class="element ajax clickable function">
         <h1>is_dev<a href="../namespaces/rnb.core.html#function_is_dev">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Return wether env is development or not.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.core.html#function_is_dev" class="more">« More »</a>
     </div>
 
                                         <div id="tag" class="element ajax clickable function">
         <h1>tag<a href="../namespaces/rnb.core.html#function_tag">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Concats strings and arrays into one string. Useful for tags.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.core.html#function_tag" class="more">« More »</a>
     </div>
@@ -209,28 +210,28 @@
 
                                         <div id="init" class="element ajax clickable function">
         <h1>init<a href="../namespaces/rnb.core.html#function_init">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Run wordpress-tools core operations.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.core.html#function_init" class="more">« More »</a>
     </div>
 
                                         <div id="image" class="element ajax clickable function">
         <h1>image<a href="../namespaces/rnb.media.html#function_image">¶</a></h1>
-        <p class="short_description">Returns image element.</p>
+        <p class="short_description">Returns an image element.</p>
         <div class="details collapse">Usage: &lt;?=\rnb\media\image($image, &#039;your-size&#039;)?&gt;</div>
         <a href="../namespaces/rnb.media.html#function_image" class="more">« More »</a>
     </div>
 
                                         <div id="captioned_image" class="element ajax clickable function">
         <h1>captioned_image<a href="../namespaces/rnb.media.html#function_captioned_image">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Returns an image element with captions.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.media.html#function_captioned_image" class="more">« More »</a>
     </div>
 
                                         <div id="get_image_data" class="element ajax clickable function">
         <h1>get_image_data<a href="../namespaces/rnb.media.html#function_get_image_data">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Return all relevant data for an image as an array.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.media.html#function_get_image_data" class="more">« More »</a>
     </div>
@@ -244,7 +245,7 @@
 
                                         <div id="inline_svg" class="element ajax clickable function">
         <h1>inline_svg<a href="../namespaces/rnb.media.html#function_inline_svg">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Return an inline svg element, contained in a wrapper div.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.media.html#function_inline_svg" class="more">« More »</a>
     </div>
@@ -320,28 +321,29 @@ and ID or term object to retrieve that term as an element.</p>
 
                                         <div id="get_excerpt" class="element ajax clickable function">
         <h1>get_excerpt<a href="../namespaces/rnb.post.html#function_get_excerpt">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Return post excerpt. Tries to get a dedicated custom field first, then falls
+back to native excerpt and finally gets a preview from content unless told not to.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.post.html#function_get_excerpt" class="more">« More »</a>
     </div>
 
                                         <div id="get_preview" class="element ajax clickable function">
         <h1>get_preview<a href="../namespaces/rnb.post.html#function_get_preview">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Get preview from the content. Stops at first paragraph.</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.post.html#function_get_preview" class="more">« More »</a>
     </div>
 
                                         <div id="excerpt" class="element ajax clickable function">
         <h1>excerpt<a href="../namespaces/rnb.post.html#function_excerpt">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Return the excerpt as a template tag, using get_excerpt().</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.post.html#function_excerpt" class="more">« More »</a>
     </div>
 
                                         <div id="preview" class="element ajax clickable function">
         <h1>preview<a href="../namespaces/rnb.post.html#function_preview">¶</a></h1>
-        <p class="short_description"></p>
+        <p class="short_description">Return a preview of the post as a template tag, using get_preview().</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.post.html#function_preview" class="more">« More »</a>
     </div>
@@ -385,7 +387,7 @@ Actual options, do for every language: http://i.imgur.com/uwvsgMj.png</div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
             <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Tue, 23 May 2017 10:15:41 +0000.<br/>
+            generated on Tue, 23 May 2017 10:54:00 +0000.<br/>
     </footer>
     </body>
 </html>

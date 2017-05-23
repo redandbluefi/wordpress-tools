@@ -1,6 +1,15 @@
 <?php
+/**
+ * Debug related tools.
+ */
+
 namespace rnb\debug;
 
+/**
+ * Takes all parameters and dumps them in a nice readable format. Unlike with xdebug var_dump or print_r,
+ * flexbox shouldn't ruin the day.
+ *
+ */
 function dump() {
   $args = func_get_args();
   $styles = "padding: .5rem 1rem; background: #fbfbfb; overflow-x: scroll;";
