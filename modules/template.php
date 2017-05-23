@@ -21,8 +21,7 @@ function output(string $template = '', array $variables = []) {
 }
 
 /**
- * Return template as a string, behaves like output().
- *
+ * Returns template output as string, and discards any return value.
  * @param string $template
  * @param array $variables
  */
