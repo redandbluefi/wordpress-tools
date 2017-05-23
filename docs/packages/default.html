@@ -252,7 +252,7 @@
                                         <div id="get" class="element ajax clickable function">
         <h1>get<a href="../namespaces/rnb.template.html#function_get">¶</a></h1>
         <p class="short_description">Prints a template. Templates can be just about anything, but they must have a
-function with the name you use to print the template. See \rnb\template\sample_template().</p>
+function with the name you use to print the template. See sample_template() and sample_template_named_params().</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.template.html#function_get" class="more">« More »</a>
     </div>
@@ -260,9 +260,18 @@ function with the name you use to print the template. See \rnb\template\sample_t
                                         <div id="sample_template" class="element ajax clickable function">
         <h1>sample_template<a href="../namespaces/rnb.template.html#function_sample_template">¶</a></h1>
         <p class="short_description">Sample template for those unsure. This is the template init function, you
-use classes if you wanted.</p>
+use classes if you wanted. Usage:
+&lt;?=\rnb\template\get(&#039;\rnb\template\sample_template&#039;, [&#039;Hello&#039;, &#039;world!&#039;]);</p>
         <div class="details collapse"></div>
         <a href="../namespaces/rnb.template.html#function_sample_template" class="more">« More »</a>
+    </div>
+
+                                        <div id="sample_template_named_params" class="element ajax clickable function">
+        <h1>sample_template_named_params<a href="../namespaces/rnb.template.html#function_sample_template_named_params">¶</a></h1>
+        <p class="short_description">Sample template using &quot;named parameters&quot;. Usage:
+&lt;?=\rnb\template\get(&#039;\rnb\template\sample_template_named_params&#039;, [&#039;data&#039; =&gt; &#039;title&#039; =&gt; &#039;Hello world!&#039;]]);</p>
+        <div class="details collapse"></div>
+        <a href="../namespaces/rnb.template.html#function_sample_template_named_params" class="more">« More »</a>
     </div>
 
                                         <div id="save" class="element ajax clickable function">
@@ -376,7 +385,7 @@ Actual options, do for every language: http://i.imgur.com/uwvsgMj.png</div>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
             <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Tue, 23 May 2017 09:58:03 +0000.<br/>
+            generated on Tue, 23 May 2017 10:15:41 +0000.<br/>
     </footer>
     </body>
 </html>
