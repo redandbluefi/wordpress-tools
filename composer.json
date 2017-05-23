@@ -12,5 +12,8 @@
     "require": {},
     "require-dev": {
       "phpdocumentor/phpdocumentor": "2.*"
+    },
+    "scripts": {
+      "phpdoc": "phpdoc -n -t docs -d modules --template=\"responsive-twig\""
     }
 }
