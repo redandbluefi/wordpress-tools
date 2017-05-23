@@ -203,6 +203,15 @@ function with the name you use to print the template. See sample_template() and 
                                                                                                                                                                         <p>Default</p>
                                                                                                     </td>
                                             </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    deprecated
+                                                </th>
+                                                <td>
+                                                                                                                                                                        
+                                                                                                                                                                        
+                                                                                                    </td>
+                                            </tr>
                                                                                                                     </table>
 
                                                                             <h3>Arguments</h3>
@@ -254,14 +263,14 @@ function with the name you use to print the template. See sample_template() and 
                     </div>
         <a href="../namespaces/rnb.template.html#function_list_all" class="more">« More »</a>    </div>
 
-                                        <div id="function_load_dir" class="element ajax clickable function" data-toggle="collapse" data-target="#function_load_dir .collapse">
-        <h1>load_dir<a href="../namespaces/rnb.template.html#function_load_dir">¶</a></h1>
-        <p class="short_description">Load templates from dir.</p>
+                                        <div id="function_load_glob" class="element ajax clickable function" data-toggle="collapse" data-target="#function_load_glob .collapse">
+        <h1>load_glob<a href="../namespaces/rnb.template.html#function_load_glob">¶</a></h1>
+        <p class="short_description">Load templates from dir using glob.</p>
         <div class="details collapse">
                             
                             <div class="row collapse">
                                 <div class="detail-description">
-                                    <div class="long_description"></div>
+                                    <div class="long_description"><p>Usage: load_glob(dirname(<strong>FILE</strong>) . '/templates/*')</p></div>
 
                                     <table class="table">
                                                                                     <tr>
@@ -284,7 +293,43 @@ function with the name you use to print the template. See sample_template() and 
                                                                     </div>
                             </div>
                     </div>
-        <a href="../namespaces/rnb.template.html#function_load_dir" class="more">« More »</a>    </div>
+        <a href="../namespaces/rnb.template.html#function_load_glob" class="more">« More »</a>    </div>
+
+                                        <div id="function_output" class="element ajax clickable function" data-toggle="collapse" data-target="#function_output .collapse">
+        <h1>output<a href="../namespaces/rnb.template.html#function_output">¶</a></h1>
+        <p class="short_description">Outputs a template. Templates are just functions that you can give parameters.</p>
+        <div class="details collapse">
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"><p>See sample_template() and sample_template_named_params().</p></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    package
+                                                </th>
+                                                <td>
+                                                                                                                                                                        
+                                                                                                                                                                        <p>Default</p>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$template</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$variables</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                            
+                                                                    </div>
+                            </div>
+                    </div>
+        <a href="../namespaces/rnb.template.html#function_output" class="more">« More »</a>    </div>
 
                                         <div id="function_readmore" class="element ajax clickable function" data-toggle="collapse" data-target="#function_readmore .collapse">
         <h1>readmore<a href="../namespaces/rnb.template.html#function_readmore">¶</a></h1>
@@ -325,7 +370,7 @@ function with the name you use to print the template. See sample_template() and 
                                         <div id="function_sample_template" class="element ajax clickable function" data-toggle="collapse" data-target="#function_sample_template .collapse">
         <h1>sample_template<a href="../namespaces/rnb.template.html#function_sample_template">¶</a></h1>
         <p class="short_description">Sample template for those unsure. This is the template init function, you
-use classes if you wanted. Usage:
+could use classes if you wanted. Usage:
 &lt;?=\rnb\template\get(&#039;\rnb\template\sample_template&#039;, [&#039;Hello&#039;, &#039;world!&#039;]);</p>
         <div class="details collapse">
                             
@@ -363,7 +408,7 @@ use classes if you wanted. Usage:
                                         <div id="function_sample_template_named_params" class="element ajax clickable function" data-toggle="collapse" data-target="#function_sample_template_named_params .collapse">
         <h1>sample_template_named_params<a href="../namespaces/rnb.template.html#function_sample_template_named_params">¶</a></h1>
         <p class="short_description">Sample template using &quot;named parameters&quot;. Usage:
-&lt;?=\rnb\template\get(&#039;\rnb\template\sample_template_named_params&#039;, [&#039;data&#039; =&gt; &#039;title&#039; =&gt; &#039;Hello world!&#039;]]);</p>
+&lt;?=\rnb\template\get(&#039;\rnb\template\sample_template_named_params&#039;, [[&#039;title&#039; =&gt; &#039;Hello world!&#039;]]);</p>
         <div class="details collapse">
                             
                             <div class="row collapse">
@@ -410,6 +455,15 @@ use classes if you wanted. Usage:
                                                 <td>
                                                                                                                                                                         
                                                                                                                                                                         <p>Default</p>
+                                                                                                    </td>
+                                            </tr>
+                                                                                    <tr>
+                                                <th>
+                                                    deprecated
+                                                </th>
+                                                <td>
+                                                                                                                                                                        
+                                                                                                                                                                        
                                                                                                     </td>
                                             </tr>
                                                                                                                     </table>
@@ -471,6 +525,42 @@ and ID or term object to retrieve that term as an element.</p>
                     </div>
         <a href="../namespaces/rnb.template.html#function_term" class="more">« More »</a>    </div>
 
+                                        <div id="function_to_string" class="element ajax clickable function" data-toggle="collapse" data-target="#function_to_string .collapse">
+        <h1>to_string<a href="../namespaces/rnb.template.html#function_to_string">¶</a></h1>
+        <p class="short_description">Return template as a string, behaves like output().</p>
+        <div class="details collapse">
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    package
+                                                </th>
+                                                <td>
+                                                                                                                                                                        
+                                                                                                                                                                        <p>Default</p>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$template</h4>
+                                                <code>string</code><p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$variables</h4>
+                                                <code>array</code><p></p>
+                                            </div>
+                                                                            
+                                                                    </div>
+                            </div>
+                    </div>
+        <a href="../namespaces/rnb.template.html#function_to_string" class="more">« More »</a>    </div>
+
                             </div>
         
         
@@ -484,7 +574,7 @@ and ID or term object to retrieve that term as an element.</p>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
             <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Tue, 23 May 2017 10:54:00 +0000.<br/>
+            generated on Tue, 23 May 2017 15:27:59 +0000.<br/>
     </footer>
     </body>
 </html>
