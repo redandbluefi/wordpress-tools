@@ -3,11 +3,10 @@ namespace rnb\template;
 
 /**
  * Prints a template. Templates can be just about anything, but they must have a
- * function with the name you use to print the template. See \rnb\template\sample_template().
+ * function with the name you use to print the template. See sample_template() and sample_template_named_params().
  *
  * @param string $template Template init function name
- * @param array $variables Anything you pass with this array will be used as
- * function parameters for the template.
+ * @param array $variables Array without string keys, will be passed as function arguments.
  *
  * @return boolean
  */
@@ -17,7 +16,8 @@ function get(string $template = '', array $variables = []) {
   }
 
   if (function_exists($template)) {
-    return call_user_func_array($template, $variables);
+    // return call_user_func_array($template, $variables);
+    return $template(...$variables); // Argument unpacking is much faster!
   } else {
     // Legacy, don't use this version.
     // If you pass a filepath instead of a valid function name, that will be
@@ -40,12 +40,30 @@ function get(string $template = '', array $variables = []) {
 
 /**
  * Sample template for those unsure. This is the template init function, you
- * use classes if you wanted.
+ * use classes if you wanted. Usage:
+ * <?=\rnb\template\get('\rnb\template\sample_template', ['Hello', 'world!']);
  *
  * @param ${2:string} $title${3}
  * @param ${4:string} $content${5}
  */
 function sample_template($title = 'Hello', $content = 'you') { ?>
+  <div>
+    <h1><?=$title?></h1>
+    <p><?=$content?></p>
+  </div><?php
+}
+
+/**
+ * Sample template using "named parameters". Usage:
+ * <?=\rnb\template\get('\rnb\template\sample_template_named_params', ['data' => 'title' => 'Hello world!']]);
+ *
+ * @param array $data
+ */
+
+function sample_template_named_params($data = []) {
+  $title = $data['title'] ?? 'Default title';
+  $content = $data['content'] ?? 'Default content';
+  ?>
   <div>
     <h1><?=$title?></h1>
     <p><?=$content?></p>
