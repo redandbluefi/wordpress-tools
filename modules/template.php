@@ -6,45 +6,47 @@
 namespace rnb\template;
 
 /**
- * Prints a template. Templates can be just about anything, but they must have a
- * function with the name you use to print the template. See sample_template() and sample_template_named_params().
+ * Outputs a template. Templates are just functions that you can give parameters.
+ * See sample_template() and sample_template_named_params().
  *
- * @param string $template Template init function name
- * @param array $variables Array without string keys, will be passed as function arguments.
- *
- * @return mixed
+ * @param string $template
+ * @param array $variables
  */
-function get(string $template = '', array $variables = []) {
-  if (!$template) {
-    throw new Exception('Template cannot be empty!');
+function output(string $template = '', array $variables = []) {
+  if ($template === '' || !function_exists($template)) {
+    throw new Exception('Invalid template.');
   }
 
-  if (function_exists($template)) {
-    // return call_user_func_array($template, $variables);
-    return $template(...$variables); // Argument unpacking is much faster!
-  } else {
-    // Legacy, don't use this version.
-    // If you pass a filepath instead of a valid function name, that will be
-    // used as template.
-    foreach ($variables as $key => $value) {
-      ${$key} = $value;
-    }
+  return $template(...$variables);
+}
 
-    // Search possible child theme first.
-    $template = locate_template($template);
+/**
+ * Return template as a string, behaves like output().
+ *
+ * @param string $template
+ * @param array $variables
+ */
+function to_string(string $template, array $variables = []) {
+  ob_start();
+  output($template, $variables);
+  return ob_get_clean();
+}
 
-    if (!empty($template)) {
-      require($template);
-      return true;
-    }
-
-    return false;
+/**
+ * Load templates from dir using glob.
+ * Usage: load_glob(dirname(__FILE__) . '/templates/*')
+ *
+ * @param string $directory
+ */
+function load_glob($directory = './*') {
+  foreach (glob($directory) as $filename) {
+    require_once($filename);
   }
 }
 
 /**
  * Sample template for those unsure. This is the template init function, you
- * use classes if you wanted. Usage:
+ * could use classes if you wanted. Usage:
  * <?=\rnb\template\get('\rnb\template\sample_template', ['Hello', 'world!']);
  *
  * @param string $title
@@ -59,7 +61,7 @@ function sample_template($title = 'Hello', $content = 'you') { ?>
 
 /**
  * Sample template using "named parameters". Usage:
- * <?=\rnb\template\get('\rnb\template\sample_template_named_params', ['data' => 'title' => 'Hello world!']]);
+ * <?=\rnb\template\get('\rnb\template\sample_template_named_params', [['title' => 'Hello world!']]);
  *
  * @param array $data
  */
@@ -67,37 +69,17 @@ function sample_template($title = 'Hello', $content = 'you') { ?>
 function sample_template_named_params($data = []) {
   $title = $data['title'] ?? 'Default title';
   $content = $data['content'] ?? 'Default content';
+  $template_hook = $data['template_hook'] ?? '<!-- You could inject stuff here -->';
+  $template_fn = $data['template_fn'] ?? function() { return 'Dummy function'; };
   ?>
   <div>
     <h1><?=$title?></h1>
     <p><?=$content?></p>
+    <?=$template_hook?>
+    <?=$template_fn()?>
   </div><?php
 }
 
-/**
- * Return template instead of printing it. Uses get() internally.
- * @param string $template Function name
- * @param array $variables Anything you pass with this array will be used as
- * function parameters for the template.
- *
- */
-function save(string $template = '', array $variables = []) {
-  ob_start();
-  get($template, $variables);
-
-  return ob_get_clean();
-}
-
-/**
- * Load templates from dir.
- *
- * @param string $directory
- */
-function load_dir($directory = './*') {
-  foreach (glob($directory) as $filename) {
-    require_once($filename);
-  }
-}
 
 /**
  * Return list of files in path relative to current file.
@@ -191,3 +173,57 @@ function readmore($post_id = NULL, $text = 'Read more') {
     "</a>"
   ]);
 }
+
+/**
+ * Prints a template. Templates can be just about anything, but they must have a
+ * function with the name you use to print the template. See sample_template() and sample_template_named_params().
+ *
+ * @param string $template Template init function name
+ * @param array $variables Array without string keys, will be passed as function arguments.
+ *
+ * @deprecated
+ * @return mixed
+ */
+function get(string $template = '', array $variables = []) {
+  if (!$template) {
+    throw new Exception('Template cannot be empty!');
+  }
+
+  if (function_exists($template)) {
+    // return call_user_func_array($template, $variables);
+    return $template(...$variables); // Argument unpacking is much faster!
+  } else {
+    // If you pass a filepath instead of a valid function name, that will be
+    // used as template.
+    foreach ($variables as $key => $value) {
+      ${$key} = $value;
+    }
+
+    // Search possible child theme first.
+    $template = locate_template($template);
+
+    if (!empty($template)) {
+      require($template);
+      return true;
+    }
+
+    return false;
+  }
+}
+
+/**
+ * Return template instead of printing it. Uses get() internally.
+ * @param string $template Function name
+ * @param array $variables Anything you pass with this array will be used as
+ * function parameters for the template.
+ *
+ * @deprecated
+ *
+ */
+function save(string $template = '', array $variables = []) {
+  ob_start();
+  get($template, $variables);
+
+  return ob_get_clean();
+}
+
