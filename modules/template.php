@@ -2,11 +2,10 @@
 namespace rnb\template;
 
 /**
- * Retrieves highest priority template. Searches STYLESHEETPATH before
- * TEMPLATEPATH, which means it will prefer child theme templates over parent.
+ * Prints a template. Templates can be just about anything, but they must have a
+ * function with the name you use to print the template. See \rnb\template\sample_template().
  *
- * @param string $template Relative path from theme root, usually
- * templates/file.php
+ * @param string $template Template init function name
  * @param array $variables Anything you pass with this array will be used as
  * function parameters for the template.
  *
@@ -21,10 +20,13 @@ function get(string $template = '', array $variables = []) {
     return call_user_func_array($template, $variables);
   } else {
     // Legacy, don't use this version.
+    // If you pass a filepath instead of a valid function name, that will be
+    // used as template.
     foreach ($variables as $key => $value) {
       ${$key} = $value;
     }
 
+    // Search possible child theme first.
     $template = locate_template($template);
 
     if (!empty($template)) {
@@ -36,12 +38,23 @@ function get(string $template = '', array $variables = []) {
   }
 }
 
+/**
+ * Sample template for those unsure. This is the template init function, you
+ * use classes if you wanted.
+ *
+ * @param ${2:string} $title${3}
+ * @param ${4:string} $content${5}
+ */
+function sample_template($title = 'Hello', $content = 'you') { ?>
+  <div>
+    <h1><?=$title?></h1>
+    <p><?=$content?></p>
+  </div><?php
+}
 
 /**
- * Retrieves highest priority template using \rnb\template\get and returns it
- * so you can save it in a variab.
- * @param string $template Relative path from theme root, usually
- * templates/file.php
+ * Return template instead of printing it. Uses get() internally.
+ * @param string Function name
  * @param array $variables Anything you pass with this array will be used as
  * function parameters for the template.
  *
