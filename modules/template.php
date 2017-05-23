@@ -17,18 +17,23 @@ function get(string $template = '', array $variables = []) {
     throw new Exception('Template cannot be empty!');
   }
 
-  foreach ($variables as $key => $value) {
-    ${$key} = $value;
+  if (function_exists($template)) {
+    return call_user_func_array($template, $variables);
+  } else {
+    // Legacy, don't use this version.
+    foreach ($variables as $key => $value) {
+      ${$key} = $value;
+    }
+
+    $template = locate_template($template);
+
+    if (!empty($template)) {
+      require($template);
+      return true;
+    }
+
+    return false;
   }
-
-  $template = locate_template($template);
-
-  if (!empty($template)) {
-    require($template);
-    return true;
-  }
-
-  return false;
 }
 
 
@@ -49,11 +54,22 @@ function save(string $template = '', array $variables = []) {
 }
 
 /**
+ * Load templates from dir.
+ *
+ * @param string $directory
+ */
+function load_dir($directory = './*') {
+  foreach (glob($directory) as $filename) {
+    require_once($filename);
+  }
+}
+
+/**
  * Return list of files in path relative to current file.
  *
  * @param string $path
  */
-function list_all ($path = '.') {
+function list_all($path = '.') {
   $path = rtrim($path, '/');
   return glob(__DIR__ . "/$path/*");
 }
