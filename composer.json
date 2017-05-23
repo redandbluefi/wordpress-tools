@@ -9,5 +9,8 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "require": {},
+    "require-dev": {
+      "phpdocumentor/phpdocumentor": "2.*"
+    }
 }
