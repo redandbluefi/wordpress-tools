@@ -1,6 +1,7 @@
 {
     "name": "redandblue/wordpress-tools",
     "type": "wordpress-muplugin",
+    "description": "Bag of tools to aid in WordPress development.",
     "license": "MIT",
     "authors": [
         {
@@ -10,7 +11,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-      "php": "^7.0"
+      "php": "^5.6 || ^7.0"
     },
     "require-dev": {
       "phpdocumentor/phpdocumentor": "2.*"
