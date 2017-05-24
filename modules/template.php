@@ -6,11 +6,11 @@
 namespace rnb\template;
 
 /**
- * Outputs a template. Templates are just functions that you can give parameters.
+ * Output renders a template. Templates are just functions that you can give parameters.
  * See sample_template() and sample_template_named_params().
  *
  * @param string $template
- * @param array $variables
+ * @param array $variables (optional)
  */
 function output(string $template = '', array $variables = []) {
   if ($template === '' || !function_exists($template)) {
