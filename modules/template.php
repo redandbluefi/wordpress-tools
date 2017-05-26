@@ -14,7 +14,7 @@ namespace rnb\template;
  */
 function output(string $template = '', array $variables = []) {
   if ($template === '' || !function_exists($template)) {
-    throw new Exception('Invalid template.');
+    throw new \Exception('Invalid template.');
   }
 
   return $template(...$variables);
@@ -185,7 +185,7 @@ function readmore($post_id = NULL, $text = 'Read more') {
  */
 function get(string $template = '', array $variables = []) {
   if (!$template) {
-    throw new Exception('Template cannot be empty!');
+    throw new \Exception('Template cannot be empty!');
   }
 
   if (function_exists($template)) {

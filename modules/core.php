@@ -163,7 +163,7 @@ function enqueue($path = NULL, $deps = [], $external = false) {
       break;
 
     default:
-      throw new Exception('Enqueued file must be a css or js file.');
+      throw new \Exception('Enqueued file must be a css or js file.');
   }
 }
 

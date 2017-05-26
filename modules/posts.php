@@ -18,7 +18,7 @@ function archive_link($post_type = 'post') {
   $archive = get_post_type_archive_link($post_type);
 
   if (!$archive) {
-    throw new Exception("Post type has no archive or it doesn't exist.");
+    throw new \Exception("Post type has no archive or it doesn't exist.");
   }
 
   return $archive;
