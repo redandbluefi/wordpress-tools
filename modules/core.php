@@ -115,24 +115,29 @@ function slugify($string = '') {
  *
  * @return void
  */
-function enqueue($path = NULL, $deps = []) {
+function enqueue($path = NULL, $deps = [], $external = false) {
   if (is_null($path)) {
     trigger_error('Enqueue path must not be empty', E_USER_ERROR);
   } else if (!defined('WPT_ENQUEUE_STRIP_PATH')) {
     trigger_error('You must define WPT_ENQUEUE_STRIP_PATH, 99% of the time it\'s /data/wordpress/htdocs', E_USER_ERROR);
   }
 
-  $files = glob($path, GLOB_MARK);
-  $unhashed = str_replace("*.", "", $path);
-  if (file_exists($unhashed)) {
-    $files[] = $unhashed;
+  if ($external) {
+    $file = $path;
+  } else {
+    $files = glob($path, GLOB_MARK);
+    $unhashed = str_replace("*.", "", $path);
+    if (file_exists($unhashed)) {
+      $files[] = $unhashed;
+    }
+
+    usort($files, function($a, $b) {
+      return filemtime($b) - filemtime($a);
+    });
+
+    $file = $files[0];
   }
 
-  usort($files, function($a, $b) {
-    return filemtime($b) - filemtime($a);
-  });
-
-  $file = $files[0];
   $parts = explode(".", $file);
   $type = array_reverse($parts)[0];
   $handle = basename($parts[0]) . "-" . $type;
@@ -149,6 +154,7 @@ function enqueue($path = NULL, $deps = []) {
       break;
 
     default:
+      \rnb\debug\dump($file, $parts, $type, $handle);
       trigger_error('Enqueued file must be a css or js file.', E_USER_ERROR);
   }
 }
