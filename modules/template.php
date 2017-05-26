@@ -7,6 +7,8 @@ namespace rnb\template;
 
 /**
  * Output renders a template. Templates are just functions that you can give parameters.
+ * Be mindful that you could do this if you're stupid: 
+ * output($_GET['template'], [$someparam]) => output('eval', ['get rekt'])
  * See sample_template() and sample_template_named_params().
  *
  * @param string $template
