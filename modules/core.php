@@ -144,6 +144,11 @@ function enqueue($path = NULL, $deps = [], $external = false) {
 
   $file = str_replace(WPT_ENQUEUE_STRIP_PATH, "", $file);
 
+  // Some externals won't have filetype in the URL, manual override.
+  if (strpos($path, "fonts.googleapis") > -1) {
+    $type = "css";
+  }
+
   switch($type) {
     case "js":
       \wp_enqueue_script($handle, $file, $deps, false, true);
@@ -154,7 +159,6 @@ function enqueue($path = NULL, $deps = [], $external = false) {
       break;
 
     default:
-      \rnb\debug\dump($file, $parts, $type, $handle);
       trigger_error('Enqueued file must be a css or js file.', E_USER_ERROR);
   }
 }
