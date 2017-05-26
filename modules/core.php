@@ -147,8 +147,10 @@ function enqueue($path = NULL, $deps = [], $external = false) {
   // Some externals won't have filetype in the URL, manual override.
   if (strpos($path, "fonts.googleapis") > -1) {
     $type = "css";
+    $handle = "fonts";
   } else if (strpos($path, "polyfill.io") > -1) {
     $type = "js";
+    $handle = "polyfill";
   }
 
   switch($type) {
@@ -161,7 +163,7 @@ function enqueue($path = NULL, $deps = [], $external = false) {
       break;
 
     default:
-      trigger_error('Enqueued file must be a css or js file.', E_USER_ERROR);
+      throw new Exception('Enqueued file must be a css or js file.');
   }
 }
 
