@@ -147,6 +147,8 @@ function enqueue($path = NULL, $deps = [], $external = false) {
   // Some externals won't have filetype in the URL, manual override.
   if (strpos($path, "fonts.googleapis") > -1) {
     $type = "css";
+  } else if (strpos($path, "polyfill.io") > -1) {
+    $type = "js";
   }
 
   switch($type) {
