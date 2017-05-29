@@ -12,7 +12,7 @@ namespace rnb\post;
  * @param mixed $post_id
  * @param boolean $fallback
  */
-function get_excerpt($post_id = NULL, $fallback = true) {
+function get_excerpt($post_id = null, $fallback = true) {
   if(is_null($post_id)) {
     $post_id = get_the_ID();
   }
@@ -33,7 +33,7 @@ function get_excerpt($post_id = NULL, $fallback = true) {
  *
  * @param mixed $post_id
  */
-function get_preview($post_id = NULL) {
+function get_preview($post_id = null) {
   if(is_null($post_id)) {
     $post_id = get_the_ID();
   }
@@ -51,7 +51,7 @@ function get_preview($post_id = NULL) {
  * @param mixed $post_id
  * @param boolean $fallback
  */
-function excerpt($post_id = NULL, $fallback = true) {
+function excerpt($post_id = null, $fallback = true) {
   $excerpt = get_excerpt($post_id, $fallback);
 
   return \rnb\core\tag([
@@ -70,7 +70,7 @@ function excerpt($post_id = NULL, $fallback = true) {
  * @param string $more
  * @param mixed $post_id
  */
-function preview($word_count = 30, $more = "&hellip;", $post_id = NULL) {
+function preview($word_count = 30, $more = "&hellip;", $post_id = null) {
   $preview = get_preview($post_id);
 
   return \rnb\core\tag([

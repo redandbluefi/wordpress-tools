@@ -115,7 +115,7 @@ function slugify($string = '') {
  *
  * @return void
  */
-function enqueue($path = NULL, $deps = [], $external = false) {
+function enqueue($path = null, $deps = [], $external = false) {
   if (is_null($path)) {
     trigger_error('Enqueue path must not be empty', E_USER_ERROR);
   } else if (!defined('WPT_ENQUEUE_STRIP_PATH')) {

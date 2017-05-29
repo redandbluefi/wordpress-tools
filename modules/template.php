@@ -7,7 +7,7 @@ namespace rnb\template;
 
 /**
  * Output renders a template. Templates are just functions that you can give parameters.
- * Be mindful that you could do this if you're stupid: 
+ * Be mindful that you could do this if you're stupid:
  * output($_GET['template'], [$someparam]) => output('eval', ['get rekt'])
  * See sample_template() and sample_template_named_params().
  *
@@ -100,8 +100,8 @@ function list_all($path = '.') {
  * @param string $time_format
  * @param mixed $time Optionally pass custom time
  */
-function date($date_format = 'd.m.Y', $time_format = 'H:i', $time = NULL) {
-  if (is_null($time)) {
+function date($date_format = 'd.m.Y', $time_format = 'H:i', $time = false) {
+  if (!$time) {
     $date = get_the_date("$date_format | $time_format");
   } else {
     $date = \date("$date_format | $time_format", strtotime($time));
@@ -125,7 +125,7 @@ function date($date_format = 'd.m.Y', $time_format = 'H:i', $time = NULL) {
  * @param mixed $term
  * @param array $options (optional)
  */
-function term($taxonomy = 'category', $term = NULL, $options = []) {
+function term($taxonomy = 'category', $term = null, $options = []) {
   $options['link_append'] = $options['link_append'] ?? ''; // append anchors or similar
   $options['link_class'] = $options['link_class'] ?? '';
 
@@ -160,7 +160,7 @@ function term($taxonomy = 'category', $term = NULL, $options = []) {
  * @param mixed $post_id
  * @param string $text
  */
-function readmore($post_id = NULL, $text = 'Read more') {
+function readmore($post_id = null, $text = 'Read more') {
   if (is_null($post_id)) {
     $post_id = get_the_ID();
   }

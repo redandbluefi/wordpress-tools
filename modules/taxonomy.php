@@ -11,7 +11,7 @@ namespace rnb\taxonomy;
  * @param string $taxonomy
  * @param mixed $post_id
  */
-function get_primary_term($taxonomy = 'category', $post_id = NULL) {
+function get_primary_term($taxonomy = 'category', $post_id = null) {
   if (is_null($post_id)) {
     $post_id = get_the_ID();
 
