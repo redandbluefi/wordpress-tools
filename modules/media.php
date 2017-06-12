@@ -71,7 +71,7 @@ function get_image_data($image, $size = 'medium') {
   } else if (is_numeric($image)) {
     $id = absint($image);
   } else {
-    trigger_error('$image must be an array or id', E_USER_WARNING);
+    throw new \Exception('$image must be an array or id');
     return false;
   }
 
