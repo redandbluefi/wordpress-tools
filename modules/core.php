@@ -151,6 +151,9 @@ function enqueue($path = null, $deps = [], $external = false) {
   } else if (strpos($path, "polyfill.io") > -1) {
     $type = "js";
     $handle = "polyfill";
+  } else if (strpos($path, "maps.googleapis") > -1) {
+    $type = "js";
+    $handle = "maps";
   }
 
   switch($type) {
