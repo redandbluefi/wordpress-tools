@@ -124,7 +124,9 @@ function enqueue($path = null, $deps = [], $external = false) {
 
   if ($external) {
     $file = $path;
+    $filetime = false;
   } else {
+    $filetime = filemtime($path);
     $files = glob($path, GLOB_MARK);
     $unhashed = str_replace("*.", "", $path);
     if (file_exists($unhashed)) {
@@ -158,11 +160,11 @@ function enqueue($path = null, $deps = [], $external = false) {
 
   switch($type) {
     case "js":
-      \wp_enqueue_script($handle, $file, $deps, false, true);
+      \wp_enqueue_script($handle, $file, $deps, $filetime, true);
     break;
 
     case "css":
-      \wp_enqueue_style($handle, $file, $deps, false, 'all');
+      \wp_enqueue_style($handle, $file, $deps, $filetime, 'all');
       break;
 
     default:
