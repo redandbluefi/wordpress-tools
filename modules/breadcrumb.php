@@ -7,7 +7,7 @@ namespace rnb\breadcrumb;
 
 class Breadcrumb {
   public function __construct($separator, $home_text) {
-    $this->separator = $separator;
+    $this->separator = apply_filters('rnb_tools_breadcrumb_separator', $separator);
     $this->home_text = $home_text;
 
     /*
@@ -20,7 +20,7 @@ class Breadcrumb {
       ? $this->queried
       : (object) array("name" => 'search');
 
-    $salt = is_singular() ? get_the_ID() : $this->queried->name;
+    $salt = is_singular() ? get_the_ID() : (is_post_type_archive() ? get_the_archive_title() : $this->queried->name);
     $this->transient_key = md5($pagenow . $salt);
   }
 
@@ -134,7 +134,7 @@ class Breadcrumb {
   }
 
   public function print() {
-    if (\rnb\core\is_prod()) {
+    if (\rnb\core\is_prod() && apply_filters('rnb_tools_breadcrumb_use_cache', true)) {
       $cached = $this->get_cached();
     } else {
       $cached = false;
