@@ -69,7 +69,7 @@ class Breadcrumb {
     } else if (is_archive()) {
       $link = get_post_type_archive_link($queried->name);
       $items .= apply_filters('rnb_tools_breadcrumb_archive', "$this->separator <a href='$link'>{$queried->label}</a> ");
-    } elseif (get_the_ID() == get_option('page_for_posts')){
+    } elseif (get_the_ID() === get_option('page_for_posts')){
       $link = get_post_type_archive_link($queried->name);
       $items .= apply_filters('rnb_tools_breadcrumb_home', "$this->separator <a href='$link'>$recent</a> ");
     } elseif (is_home()) {
