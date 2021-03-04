@@ -29,7 +29,7 @@ class Breadcrumb {
     $open = "<div class='rnb-breadcrumb'>";
     $close = "</div>";
 
-    $home_url = get_home_url();
+    $home_url = apply_filters('rnb_tools_home_url', get_home_url());
     $home = "<a href='$home_url' class='home-url'>$this->home_text</a>";
     $items = "";
 
