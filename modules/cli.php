@@ -1,5 +1,100 @@
 <?php
 
+function rnb_get_files_from_dir ($dir_name) {
+  $results = [];
+
+  $files_extensions = array(
+    'php',
+    'inc',
+    'twig',
+  );
+
+  $files = scandir($dir_name);
+  foreach ($files as $key => $value) {
+    $path = realpath($dir_name . DIRECTORY_SEPARATOR . $value);
+    if (!is_dir($path)) {
+      $path_parts = pathinfo($path);
+      if (!empty($path_parts['extension']) && in_array($path_parts['extension'], $files_extensions)) {
+        $results[] = $path;
+      }
+    } else if ($value != "." && $value != "..") {
+      $temp = rnb_get_files_from_dir($path);
+      $results = array_merge($results, $temp);
+    }
+  }
+  return $results;
+}
+
+function rnb_get_strings_from_files($files) {
+  $singleQuoteTempPattern = "\'";
+  $singleQuoteTempReg = '[\single_quote]';
+
+  $doubleQuoteTempPattern = '\"';
+  $doubleQuoteTempReg = '[\double_quote]';
+
+  $strings = [];
+  foreach ($files as $file) {
+    $content = file_get_contents($file);
+    $content = str_replace($singleQuoteTempPattern, $singleQuoteTempReg, $content);
+    $content = str_replace($doubleQuoteTempPattern, $doubleQuoteTempReg, $content);
+    // find polylang functions
+    preg_match_all("/[\s=\(]+pll_[_e][\s]*\([\s]*[\'\"](.*?)[\'\"][\s]*\)/s", $content, $matches);
+    if (!empty($matches[1])) {
+      $strings = array_merge($strings, $matches[1]);
+    }
+
+    // find wp functions: __(), _e(), _x()
+    preg_match_all("/[\s=\(\.]+_[_ex][\s]*\([\s]*[\'](.*?)[\'][\s]*[,]*[\s]*[\']*(.*?)[\']*[\s]*\)/s", $content, $matches);
+    if (!empty($matches[1])) {
+      $strings = array_merge($strings, $matches[1]);
+    }
+    preg_match_all("/[\s=\(\.]+_[_ex][\s]*\([\s]*[\"](.*?)[\"][\s]*[,]*[\s]*[\"]*(.*?)[\"]*[\s]*\)/s", $content, $matches);
+    if (!empty($matches[1])) {
+      $strings = array_merge($strings, $matches[1]);
+    }
+
+    // find wp functions: esc_html_e, esc_html, esc_html__, esc_attr, esc_attr_e, esc_attr__
+    preg_match_all("/[\s=\(\.]+(esc_html|esc_attr)[_e]*[\s]*\([\s]*[\'](.*?)[\'][\s]*[,]*[\s]*[\']*(.*?)[\']*[\s]*\)/s", $content, $matches);
+    if (!empty($matches[2])) {
+      $strings = array_merge($strings, $matches[2]);
+    }
+    preg_match_all("/[\s=\(\.]+(esc_html|esc_attr)[_e]*[\s]*\([\s]*[\"](.*?)[\"][\s]*[,]*[\s]*[\"]*(.*?)[\"]*[\s]*\)/s", $content, $matches);
+    if (!empty($matches[2])) {
+      $strings = array_merge($strings, $matches[2]);
+    }
+
+    // find wp functions: _n: single + plural
+    preg_match_all("/[\s=\(\.]+_n[\s]*\([\s]*[\'\"](.*?)[\'\"][\s]*,[\s]*[\'\"](.*?)[\'\"][\s]*,(.*?)\)/s", $content, $matches);
+    if (!empty($matches[1])) {
+      $strings = array_merge($strings, $matches[1]);
+      $strings = array_merge($strings, $matches[2]);
+    }
+  }
+
+  foreach ($strings as $key => $value) {
+    // inverse quotes:
+    $value = str_replace($singleQuoteTempReg, '\'', $value);
+    $value = str_replace($doubleQuoteTempReg, "\"", $value);
+
+    $strings[$key] = $value;
+  }
+  return $strings;
+}
+
+$rnb_set_strings_to_translate = function( $args = [], $assoc_args = [] ) {
+  $start = microtime(true);
+  $files = rnb_get_files_from_dir(get_template_directory());
+  foreach(apply_filters( 'rnb_plugins_to_string_translation', [] ) as $plugin) {
+    $files = array_merge($files, rnb_get_files_from_dir(WP_PLUGIN_DIR . '/' . $plugin));
+  }
+  $strings = rnb_get_strings_from_files($files);
+
+  update_option('rnb_strings_to_translate', $strings, false);
+  
+  $execution_time =  microtime(true) - $start;
+  WP_CLI::success( "Loop " .count($files). " files and added, " . count($strings) . " strings to translations. Execution time: " . $execution_time );
+};
+
 $rnb_set_parents = function( $args = [], $assoc_args = [] ) {
   $arguments = wp_parse_args( $assoc_args, array(
     'post-type'   => 'post',
@@ -181,4 +276,16 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
    *  }
    */
   WP_CLI::add_command( 'rnb add pages', $rnb_add_pages );
+
+  /**
+   * This command loops current theme and plugins that are set in 'rnb_plugins_to_string_translation' filter (array),
+   * finds polylang translations and add them to options.
+   * In theme we can get strings from that option and set string to be translated.
+   * 
+   * call `wp rnb set strings to translate`
+   * 
+   * We can use that wp-cli command on deploy action so this command run every time we deploy something.
+   * 
+   */
+  WP_CLI::add_command( 'rnb set strings to translate', $rnb_set_strings_to_translate );
 }
