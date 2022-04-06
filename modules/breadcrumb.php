@@ -1,12 +1,15 @@
 <?php
+
 /**
  * Contains the breadcrumb.
  */
 
 namespace rnb\breadcrumb;
 
-class Breadcrumb {
-  public function __construct($separator, $home_text) {
+class Breadcrumb
+{
+  public function __construct($separator, $home_text)
+  {
     $this->separator = apply_filters('rnb_tools_breadcrumb_separator', $separator);
     $this->home_text = $home_text;
 
@@ -24,7 +27,8 @@ class Breadcrumb {
     $this->transient_key = md5($pagenow . $salt);
   }
 
-  public function create() {
+  public function create()
+  {
     $queried = $this->queried;
     $open = "<div class='rnb-breadcrumb'>";
     $close = "</div>";
@@ -39,37 +43,37 @@ class Breadcrumb {
     } else {
       $locale = get_locale();
 
-      switch($locale) {
+      switch ($locale) {
         case "fi":
           $recent = 'Ajankohtaista';
           $search = 'Haku';
-        break;
+          break;
 
         case "en":
           $recent = 'Recent';
           $search = 'Search';
-        break;
+          break;
 
         case "sv":
           $recent = 'Senaste';
           $search = 'Sök';
-        break;
+          break;
 
         default:
           $recent = 'Recent';
           $search = 'Search';
-        break;
+          break;
       }
     }
 
     $recent = apply_filters('rnb_tools_breadcrumb_recent_text', $recent);
-    if (is_category()){
+    if (is_category()) {
       $link = get_category_link($queried->term_id);
       $items .= apply_filters('rnb_tools_breadcrumb_category', "$this->separator <a href='$link'>{$queried->name}</a> ");
     } else if (is_archive()) {
       $link = get_post_type_archive_link($queried->name);
       $items .= apply_filters('rnb_tools_breadcrumb_archive', "$this->separator <a href='$link'>{$queried->label}</a> ");
-    } elseif (get_the_ID() === get_option('page_for_posts')){
+    } elseif (get_the_ID() === get_option('page_for_posts')) {
       $link = get_post_type_archive_link($queried->name);
       $items .= apply_filters('rnb_tools_breadcrumb_home', "$this->separator <a href='$link'>$recent</a> ");
     } elseif (is_home()) {
@@ -88,14 +92,13 @@ class Breadcrumb {
       $post_type_obj = get_post_type_object($queried->post_type);
       $has_archive = $post_type_obj->has_archive;
 
-      if ($has_archive){
+      if ($has_archive) {
         $link = get_post_type_archive_link($queried->post_type);
         $items .= apply_filters(
           'rnb_tools_breadcrumb_single_cpt_archive',
           "$this->separator <a href='$link'>{$post_type_obj->label}</a> "
         );
-
-      } elseif($queried->post_type === "post") {
+      } elseif ($queried->post_type === "post") {
         $link = get_post_type_archive_link($queried->post_type);
         $items .= apply_filters(
           'rnb_tools_breadcrumb_single_post_archive',
@@ -105,7 +108,7 @@ class Breadcrumb {
 
       if (!empty($ancestors) && apply_filters('rnb_tools_breadcrumb_enable_ancestors', true)) {
         $ancestors = array_reverse($ancestors);
-        foreach($ancestors as $ancestor) {
+        foreach ($ancestors as $ancestor) {
           $link = get_permalink($ancestor);
           $title = get_the_title($ancestor);
 
@@ -117,7 +120,6 @@ class Breadcrumb {
       $title = get_the_title(get_the_ID());
 
       $items .= apply_filters('rnb_tools_breadcrumb_current', "$this->separator <a href='$link'>$title</a> ");
-
     }
 
     $open = apply_filters('rnb_tools_breadcrumb_open', $open);
@@ -129,11 +131,13 @@ class Breadcrumb {
     return $breadcrumb;
   }
 
-  public function get_cached() {
+  public function get_cached()
+  {
     return get_transient($this->transient_key);
   }
 
-  public function print() {
+  public function print()
+  {
     if (\rnb\core\is_prod() && apply_filters('rnb_tools_breadcrumb_use_cache', true)) {
       $cached = $this->get_cached();
     } else {
@@ -150,7 +154,8 @@ class Breadcrumb {
   }
 }
 
-function init($separator = '&rsaquo;', $home_text = '<i class="fa fa-home"></i>') {
+function init($separator = '&rsaquo;', $home_text = '<i class="fa fa-home"></i>')
+{
   $instance = new Breadcrumb($separator, $home_text);
   return $instance->print();
 }
