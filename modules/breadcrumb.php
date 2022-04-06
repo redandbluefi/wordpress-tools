@@ -24,6 +24,9 @@ class Breadcrumb
       : (object) array("name" => 'search');
 
     $salt = is_singular() ? get_the_ID() : (is_post_type_archive() ? get_the_archive_title() : $this->queried->name);
+    if (function_exists('pll_register_string')) {
+      $salt .= pll_current_language('name');
+    }
     $this->transient_key = md5($pagenow . $salt);
   }
 
