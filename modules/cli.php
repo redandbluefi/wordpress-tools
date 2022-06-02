@@ -39,10 +39,16 @@ function rnb_get_strings_from_files($files)
     $content = file_get_contents($file);
     $content = str_replace($singleQuoteTempPattern, $singleQuoteTempReg, $content);
     $content = str_replace($doubleQuoteTempPattern, $doubleQuoteTempReg, $content);
-    // find polylang functions
-    preg_match_all("/[\s=\(]+pll_[_e][\s]*\([\s]*[\'\"](.*?)[\'\"][\s]*\)/s", $content, $matches);
-    if (!empty($matches[1])) {
-      $strings = array_merge($strings, $matches[1]);
+    // find polylang functions: pll__, pll_e, pll_esc_html_e, pll_esc_html__, pll_esc_attr_e, pll_esc_attr__
+    // Find functions with single quotes: pll__('string')
+    preg_match_all("/[\s=\(\.]+(pll_|pll_esc_attr_|pll_esc_html_)[_e]*[\s]*\([\s]*[\'](.*?)[\'][\s]*[,]*[\s]*[\']*(.*?)[\']*[\s]*\)/s", $content, $matches);
+    if (!empty($matches[2])) {
+      $strings = array_merge($strings, $matches[2]);
+    }
+    // Find functions with double quotes: pll__("string")
+    preg_match_all("/[\s=\(\.]+(pll_|pll_esc_attr_|pll_esc_html_)[_e]*[\s]*\([\s]*[\"](.*?)[\"][\s]*[,]*[\s]*[\']*(.*?)[\']*[\s]*\)/s", $content, $matches);
+    if (!empty($matches[2])) {
+      $strings = array_merge($strings, $matches[2]);
     }
 
     // find wp functions: __(), _e(), _x()
