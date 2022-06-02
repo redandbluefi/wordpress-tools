@@ -1,6 +1,7 @@
 <?php
 
-function rnb_get_files_from_dir ($dir_name) {
+function rnb_get_files_from_dir($dir_name)
+{
   $results = [];
 
   $files_extensions = array(
@@ -25,7 +26,8 @@ function rnb_get_files_from_dir ($dir_name) {
   return $results;
 }
 
-function rnb_get_strings_from_files($files) {
+function rnb_get_strings_from_files($files)
+{
   $singleQuoteTempPattern = "\'";
   $singleQuoteTempReg = '[\single_quote]';
 
@@ -81,38 +83,37 @@ function rnb_get_strings_from_files($files) {
   return $strings;
 }
 
-$rnb_set_strings_to_translate = function( $args = [], $assoc_args = [] ) {
+$rnb_set_strings_to_translate = function ($args = [], $assoc_args = []) {
   $start = microtime(true);
   $files = rnb_get_files_from_dir(get_template_directory());
-  foreach(apply_filters( 'rnb_plugins_to_string_translation', [] ) as $plugin) {
+  foreach (apply_filters('rnb_plugins_to_string_translation', []) as $plugin) {
     $files = array_merge($files, rnb_get_files_from_dir(WP_PLUGIN_DIR . '/' . $plugin));
   }
   $strings = rnb_get_strings_from_files($files);
 
   update_option('rnb_strings_to_translate', $strings, false);
-  
+
   $execution_time =  microtime(true) - $start;
-  WP_CLI::success( "Loop " .count($files). " files and added, " . count($strings) . " strings to translations. Execution time: " . $execution_time );
+  WP_CLI::success("Loop " . count($files) . " files and added, " . count($strings) . " strings to translations. Execution time: " . $execution_time);
 };
 
-$rnb_set_parents = function( $args = [], $assoc_args = [] ) {
-  $arguments = wp_parse_args( $assoc_args, array(
+$rnb_set_parents = function ($args = [], $assoc_args = []) {
+  $arguments = wp_parse_args($assoc_args, array(
     'post-type'   => 'post',
     'parent'    => null
-  ) );
+  ));
 
-  if(is_null($arguments['parent']) && is_numeric(intval($arguments['parent']))) {
-    WP_CLI::error( " invalid parent ");
-  }
-  else {
+  if (is_null($arguments['parent']) && is_numeric(intval($arguments['parent']))) {
+    WP_CLI::error(" invalid parent ");
+  } else {
     $count = setParentsOnPostType($arguments['post-type'], $arguments['parent']);
-    
-    WP_CLI::success( "$count ".$arguments['post-type']." -posts set to child of ".$arguments['parent'] );
-  }
 
+    WP_CLI::success("$count " . $arguments['post-type'] . " -posts set to child of " . $arguments['parent']);
+  }
 };
 
-function setParentsOnPostType($post_type, $parrent_id = 0) {
+function setParentsOnPostType($post_type, $parrent_id = 0)
+{
   $counter = 0;
   $ok = true;
 
@@ -121,13 +122,13 @@ function setParentsOnPostType($post_type, $parrent_id = 0) {
     'posts_per_page' => -1,
   ];
   $query = new WP_Query($args);
-  
-  if($query->have_posts()) { // if we have posts, then we update data
-    
-    while($query->have_posts()) {
+
+  if ($query->have_posts()) { // if we have posts, then we update data
+
+    while ($query->have_posts()) {
       $query->the_post();
       wp_update_post([
-        'ID' => get_the_ID(), 
+        'ID' => get_the_ID(),
         'post_parent' => $parrent_id
       ]);
 
@@ -138,54 +139,52 @@ function setParentsOnPostType($post_type, $parrent_id = 0) {
   return $counter;
 }
 
-$rnb_add_pages = function( $args = [], $assoc_args = [] ) {
-  $arguments = wp_parse_args( $assoc_args, array(
+$rnb_add_pages = function ($args = [], $assoc_args = []) {
+  $arguments = wp_parse_args($assoc_args, array(
     'menu'              => 'Main menu',
     'setup-nav'         => false,
     'set-primary-nav'   => true
-  ) );
+  ));
 
   $json = false;
-  if(isset($args[0])) {
+  if (isset($args[0])) {
     $json = $args[0];
   }
 
-  if(is_file(WP_CLI_PHAR_PATH."/".$json)) {
+  if (is_file(WP_CLI_PHAR_PATH . "/" . $json)) {
     $menu_id = 0;
 
-    if($arguments['setup-nav']) {
-      $menu_exists = wp_get_nav_menu_object( $arguments['menu'] );
-      if ( ! $menu_exists ) {
-        $menu_id = wp_create_nav_menu( $arguments['menu'] );
-        if($arguments['set-primary-nav']) {
+    if ($arguments['setup-nav']) {
+      $menu_exists = wp_get_nav_menu_object($arguments['menu']);
+      if (!$menu_exists) {
+        $menu_id = wp_create_nav_menu($arguments['menu']);
+        if ($arguments['set-primary-nav']) {
           $locations = get_theme_mod('nav_menu_locations');
           $locations['primary'] = $menu_id;
-          set_theme_mod( 'nav_menu_locations', $locations );
+          set_theme_mod('nav_menu_locations', $locations);
         }
-      }
-      else {
-        $menu_id = $menu_exists->term_id ;
+      } else {
+        $menu_id = $menu_exists->term_id;
       }
     }
 
-    $postsTree = json_decode( file_get_contents(WP_CLI_PHAR_PATH."/".$json) );
+    $postsTree = json_decode(file_get_contents(WP_CLI_PHAR_PATH . "/" . $json));
     $counter = 0;
-    foreach($postsTree->posts as $post) {
+    foreach ($postsTree->posts as $post) {
       $counter += rnb_add_page($post, $arguments['setup-nav'], $menu_id);
     }
-    if($counter === 0) {
+    if ($counter === 0) {
       WP_CLI::error("$counter pages added.");
+    } else {
+      WP_CLI::success("Successfully added $counter pages.");
     }
-    else {
-      WP_CLI::success( "Successfully added $counter pages." );
-    }
-  }
-  else {
+  } else {
     WP_CLI::error("invalid file");
   }
 };
 
-function rnb_add_page($post, $setupNav = false, $menu_id = 0, $parent = 0, $parentMenuId = 0) {
+function rnb_add_page($post, $setupNav = false, $menu_id = 0, $parent = 0, $parentMenuId = 0)
+{
   $ok = true;
   $counter = 0;
 
@@ -195,21 +194,21 @@ function rnb_add_page($post, $setupNav = false, $menu_id = 0, $parent = 0, $pare
     'post_status'     => 'publish',
     'post_name'       => sanitize_title($post->title)
   ];
-  
-  if($parent !== 0) {
+
+  if ($parent !== 0) {
     $postArgs["post_parent"] = $parent;
   }
-  
+
   $pid = wp_insert_post($postArgs);
-  
-  
-  if($pid === 0) {
+
+
+  if ($pid === 0) {
     $ok = false;
   }
-  
-  if($ok) {
+
+  if ($ok) {
     $counter++;
-    
+
     $navArgs = [
       'menu-item-title' => trim($post->title),
       'menu-item-object-id' => $pid,
@@ -218,16 +217,16 @@ function rnb_add_page($post, $setupNav = false, $menu_id = 0, $parent = 0, $pare
       'menu-item-type' => 'post_type',
     ];
 
-    if($parentMenuId !== 0) {
+    if ($parentMenuId !== 0) {
       $navArgs["menu-item-parent-id"] = $parentMenuId;
     }
-    
-    if($setupNav && $menu_id !== 0) {
+
+    if ($setupNav && $menu_id !== 0) {
       $parentMenuId = wp_update_nav_menu_item($menu_id, 0, $navArgs);
     }
 
-    if(isset($post->posts)) {
-      foreach($post->posts as $child) {
+    if (isset($post->posts)) {
+      foreach ($post->posts as $child) {
         $counter += rnb_add_page($child, $setupNav, $menu_id, $pid, $parentMenuId);
       }
     }
@@ -236,7 +235,7 @@ function rnb_add_page($post, $setupNav = false, $menu_id = 0, $parent = 0, $pare
   return $counter;
 }
 
-if ( defined( 'WP_CLI' ) && WP_CLI ) {
+if (defined('WP_CLI') && WP_CLI) {
   /**
    * Set parent any parent for all post type posts
    * 
@@ -246,7 +245,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
    * 
    * call `wp rnb set parents --post-type=type --parent=1`
    */
-  WP_CLI::add_command( 'rnb set parents', $rnb_set_parents );
+  WP_CLI::add_command('rnb set parents', $rnb_set_parents);
 
   /**
    * Set empty pages, hierarcy and menu from json.
@@ -261,21 +260,21 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
    * 
    * Json-file format:
    * {
-	 * "posts": [
-	 * 	{
-	 *		"title": "Etusivu"
-	 *	},
-	 *	{
-	 *		"title": "Palvelut",
-	 *		"posts": [
-	 *			{
-	 *				"title": "Palvelu"
+   * "posts": [
+   * 	{
+   *		"title": "Etusivu"
+   *	},
+   *	{
+   *		"title": "Palvelut",
+   *		"posts": [
+   *			{
+   *				"title": "Palvelu"
    *			},
    *    ]
    *   }
    *  }
    */
-  WP_CLI::add_command( 'rnb add pages', $rnb_add_pages );
+  WP_CLI::add_command('rnb add pages', $rnb_add_pages);
 
   /**
    * This command loops current theme and plugins that are set in 'rnb_plugins_to_string_translation' filter (array),
@@ -287,5 +286,5 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
    * We can use that wp-cli command on deploy action so this command run every time we deploy something.
    * 
    */
-  WP_CLI::add_command( 'rnb set strings to translate', $rnb_set_strings_to_translate );
+  WP_CLI::add_command('rnb set strings to translate', $rnb_set_strings_to_translate);
 }
