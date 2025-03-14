@@ -8,6 +8,15 @@ namespace rnb\breadcrumb;
 
 class Breadcrumb
 {
+
+  private $separator;
+
+  private $home_text;
+
+  private $queried;
+
+  private $transient_key;
+
   public function __construct($separator, $home_text)
   {
     $this->separator = apply_filters('rnb_tools_breadcrumb_separator', $separator);

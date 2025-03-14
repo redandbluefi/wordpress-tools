@@ -116,6 +116,9 @@ function slugify($string = '') {
  * @return void
  */
 function enqueue($path = null, $deps = [], $external = false) {
+
+  $is_bedrock = file_exists(dirname(__DIR__, 4) . '/wp/wp-load.php');
+
   if (is_null($path)) {
     trigger_error('Enqueue path must not be empty', E_USER_ERROR);
   } else if (!defined('WPT_ENQUEUE_STRIP_PATH')) {
@@ -144,7 +147,13 @@ function enqueue($path = null, $deps = [], $external = false) {
   $type = array_reverse($parts)[0];
   $handle = basename($parts[0]) . "-" . $type;
 
-  $file = str_replace(WPT_ENQUEUE_STRIP_PATH, "", $file);
+  $file = $is_bedrock ? str_replace( dirname( rtrim(ABSPATH,"/") )."/app","",$file) : str_replace(WPT_ENQUEUE_STRIP_PATH, "", $file);
+
+  if($is_bedrock) {
+    $file = get_stylesheet_directory_uri() . str_replace("/themes/pro-artibus-theme", "", $file);
+  }
+
+  error_log("Enqueueing $file".PHP_EOL, 3, "/home/j/www.log");
 
   // Some externals won't have filetype in the URL, manual override.
   if (strpos($path, "fonts.googleapis") > -1) {
