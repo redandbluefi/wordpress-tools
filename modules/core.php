@@ -153,8 +153,6 @@ function enqueue($path = null, $deps = [], $external = false) {
     $file = get_stylesheet_directory_uri() . str_replace("/themes/pro-artibus-theme", "", $file);
   }
 
-  error_log("Enqueueing $file".PHP_EOL, 3, "/home/j/www.log");
-
   // Some externals won't have filetype in the URL, manual override.
   if (strpos($path, "fonts.googleapis") > -1) {
     $type = "css";
