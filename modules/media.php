@@ -150,12 +150,14 @@ function themeresource(string $resource = '', $mode = 'uri') {
  * Return an inline svg element, contained in a wrapper div.
  *
  * @param mixed $name
+ * @param string $custom_class
  */
-function inline_svg($name) {
+function inline_svg($name, string $custom_class = '') {
   $checklist = [$name, "$name.svg", "icon_$name.svg"]; // check in this order
-  $build_svg = function($path) {
+  $custom_class = $custom_class ? ' ' . $custom_class : '';
+  $build_svg = function($path) use ($custom_class) {
     $svg = file_get_contents($path);
-    return "<div class='wpt-inline-svg'>$svg</div>";
+    return "<div class='wpt-inline-svg" . $custom_class . "'>$svg</div>";
   };
 
   foreach ($checklist as $file) {
